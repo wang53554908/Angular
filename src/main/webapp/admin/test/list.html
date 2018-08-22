@@ -1,0 +1,42 @@
+<script type="text/ng-template" id="myModalContent.html">
+                <div>
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-label="Close"><span aria-show="true"></span></button>
+                        <h4 class="modal-title">修改</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-input-group">
+                            姓名:<input type="text" class="motal-input form-control" ng-model="student.name"/>
+                        </div>
+                        <div class="modal-input-group">
+                            性别:<input type="text" class="motal-input form-control" ng-model="student.sex"/> 
+                        </div>
+                        <div class="modal-input-group">
+                            专业:<input type="text" class="motal-input form-control" ng-model="student.major"/>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" ng-click="gb()">关闭</button>
+                        <button type="button" class="btn btn-primary" ng-click="bc()">保存</button>
+                    </div>
+                </div>
+        </script>
+        <div ng-controller="mainController">
+            <table class="table table-bordered" style="width:400px;">
+                <tr>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>专业</th>
+                    <th>修改</th>
+                </tr>
+                <tr ng-repeat="student in students">
+                    <td>{{student.name}}</td>
+                    <td>{{student.sex}}</td>
+                    <td>{{student.major}}</td>
+                    <td>
+                        <button class="btn" ng-click="open()">修改</button>
+                    </td>
+                </tr>
+            </table>
+        </div>

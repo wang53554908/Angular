@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<description>apache shiro配置</description>
+
+	<bean id="login" class="com.sky.admin.security.LoginFilter" />
+	<bean id="SessionExpiredFilter" class="com.sky.admin.security.SessionExpiredFilter" />
+	<bean id="permission" class="com.sky.admin.security.PermissionFilter" />
+
+	
+	<bean name="passwordService"
+		class="org.apache.shiro.authc.credential.DefaultPasswordService" />
+
+	<!-- 登录时与数据库交互的类 -->
+	<bean id="shiroDbRealm" class="com.sky.admin.security.SecurityRealm">
+		<property name="authorizationCacheName" value="shiro.authorizationCache" />
+	</bean>
+
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- <property name="sessionMode" value="native" /> <property name="sessionManager" ref="sessionManager" /> -->
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="realm" ref="shiroDbRealm" />
+		<!-- <property name="sessionManager" ref="sessionManager"/> -->
+	</bean>
+
+
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <!-- Set a net.sf.ehcache.CacheManager instance here if you already have 
+            one. If not, a new one will be creaed with a default config: -->
+        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>  
+    </bean>
+
+
+	<!-- shrio的filter，在这里可以配置，登陆相关的页面，及对哪些URL进行权限拦截权限认证 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+
+		<!-- 登陆页面,即对所有需要authc登陆的请求时，如果未登陆都会被重定向到这里 -->
+		<property name="loginUrl" value="/toLogin" />
+
+		<!--授权失败时跳到的页面 -->
+		<property name="unauthorizedUrl" value="/toLogin" />
+		
+		<property name="filters">
+	        <util:map>
+	            <entry key="login" value-ref="login"></entry>
+	            <entry key="sessionexp" value-ref="SessionExpiredFilter"></entry>
+	        </util:map>
+	    </property>
+
+		<property name="filterChainDefinitions">
+			<value>
+				<!-- login -->
+				/toLogin = anon
+				/login = anon
+				/css/** = anon
+				/vendor/jquery/jquery.min.js = anon
+				<!-- authc -->
+				/** = sessionexp,authc
+			</value>
+		</property>
+	</bean>
+	
+	  <!-- 会话管理器 -->
+		<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		    <property name="globalSessionTimeout" value="30000"/>
+		    <property name="deleteInvalidSessions" value="true"/>
+		    <property name="sessionValidationSchedulerEnabled" value="true"/>
+		
+		    <property name="sessionDAO" ref="sessionDAO"/>
+		    <property name="sessionIdCookieEnabled" value="true"/>
+		    <property name="sessionIdCookie" ref="sessionIdCookie"/>
+		</bean>
+		
+		<!-- 会话DAO -->
+		<bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+		    <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
+		    <property name="sessionIdGenerator" ref="sessionIdGenerator"/>
+		</bean>
+		<!-- 会话ID生成器 -->
+		<bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
+		 <!-- 会话Cookie模板 -->
+		<bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+		    <constructor-arg value="sid"/>
+		    <property name="httpOnly" value="true"/>
+		    <property name="maxAge" value="-1"/>
+		</bean>
+
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<!-- 开启Shiro注解的Spring配置方式的beans。在lifecycleBeanPostProcessor之后运行 -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor" />
+	
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+</beans>

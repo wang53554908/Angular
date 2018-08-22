@@ -1,0 +1,80 @@
+<div class="wrapper-md" ng-controller="buttonListController">
+  <div class="panel panel-default" style="width: 30%;float: left;">
+    <div class="panel-heading">
+    <ul class="nav nav-pills pull-right">
+            <li style=" padding-top:4px; padding-right:4px">
+	            
+            </li>
+    </ul>
+      菜单
+    </div>
+    <div class="col">
+	    <div class="wrapper-md">
+	      <div class="b-a bg-light dk r r-2x" style="border: none;background-color:white">
+	        <span ng-if="doing_async">...loading...</span>
+	        <abn-tree 
+	          tree-data         = "my_data" 
+	          tree-control      = "my_tree" 
+	          on-select         = "my_tree_handler(branch)" 
+	          expand-level      = "2" 
+	          initial-selection = ""
+	          icon-leaf         = "fa fa-file-o"
+	          icon-expand       = "fa fa-plus"
+	          icon-collapse     = "fa fa-minus"
+	          checkbox          = "false"
+	          >
+	        </abn-tree>
+	      </div>
+	    </div>
+	  </div>
+  </div>
+  <div class="panel panel-default" style="width: 67%;float: left;margin-left: 10px;">
+    <div class="panel-heading">
+    <ul class="nav nav-pills pull-right">
+            <li style=" padding-top:4px; padding-right:4px">
+	            <button has-permission='btn_add' class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="addButton()" ng-class="app.settings.navbarHeaderColor">
+	               <i class="fa fa-plus"></i>新增
+	            </button>
+            </li>
+    </ul>
+     按钮
+    </div>
+    <div class="row wrapper">
+      <div class="col-sm-10">
+      按钮名称: <input id="name" type="text" class="form-control input-sm w-sm inline m-r" ng-model="name" ng-keyup="search($event)"/>
+      <button class="btn btn-sm btn-default" ng-click="reSearch()" type="button">查询</button>
+      </div>
+    </div>
+    <div class="table-responsive">
+     <table class="table table-striped b-t b-light">
+        <thead>
+            <tr ng-class="app.settings.navbarHeaderColor">
+            <!-- 
+            <th style="width:20px;">
+              <label class="i-checks m-b-none">
+                <input type="checkbox" ng-click="selectAll()"><i></i>
+              </label>
+            </th>
+             -->
+            <th>按钮名称</th>
+            <th>CODE</th>
+            <th style="width:100px;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in data" ng-class="{tr_selected:item.selected}" ng-click="selectOne(item,data)" ng-dblclick="addButton(item.id,0)">
+                <!-- <td><label class="i-checks m-b-none"><input type="checkbox" ng-model="data.selected"><i></i></label></td> -->
+                <td>{{item.name}}</td>
+                <td>{{item.code}}</td>
+                <td>
+	              <a  has-permission='btn_edit' ng-click="addButton(item.id,1)" title="修改" class="active"><i class="fa fa-edit fa-lg"></i></a>
+	              &nbsp;&nbsp;
+	              <a  has-permission='btn_del' ng-click="delButton(item.id)" title="删除" class="active"><i class="fa fa-trash-o fa-lg"></i></a>
+	            </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <footer class="panel-footer"><tm-pagination conf="paginationConf"></tm-pagination></footer>
+  </div>
+</div>

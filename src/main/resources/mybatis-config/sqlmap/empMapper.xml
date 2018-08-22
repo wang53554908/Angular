@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sky.admin.dao.EmpMapper">
+	<resultMap id="empMap" type="com.sky.admin.entity.Employee">
+		<id property="id" column="id" javaType="int"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="shortName" column="short_name" javaType="String"/>
+		<result property="created" column="created" javaType="Date"/>
+		<result property="createdBy" column="created_by" javaType="String"/>
+		<result property="lastUpd" column="last_upd" javaType="Date"/>
+		<result property="lastUpdBy" column="last_upd_by" javaType="String"/>
+		<result property="parentName" column="parent_name" javaType="String"/>
+	</resultMap>
+	<select id="select" parameterType="com.sky.common.entity.Page" resultType="com.sky.admin.entity.Employee">
+		select t1.*
+		 from t_employee t1
+		<where>
+			<if test="params.name != null and params.name != ''">
+				and t1.name=#{params.name}
+			</if>
+		</where>
+	</select>
+	<select id="findOne" resultType="com.sky.admin.entity.Employee">
+		select * from t_employee where id = #{id}
+	</select>
+	<select id="update" parameterType="com.sky.admin.entity.Employee" >
+		update t_employee 
+		<set>
+		  <if test="name != null and name != ''">
+		    name=#{name},
+		  </if>
+		  <if test="shortName != null and shortName != ''">
+		    short_name=#{shortName},
+		  </if>
+		</set>
+		where id=#{id}
+	</select>
+	
+	<select id="findRootEmpList"  parameterType="com.sky.admin.entity.EmployeeQry" resultType="com.sky.admin.entity.Employee">
+	    select * from t_employee  where parent_id is null
+	</select>
+	
+	<select id="findChildEmpList"  parameterType="com.sky.admin.entity.EmployeeQry" resultType="com.sky.admin.entity.Employee">
+	    select t2.*,t1.name as parent_name from t_employee t1,t_employee t2
+	    <where>
+	      t1.id = t2.parent_id
+	      <if test="parentId != null and parentId != ''">
+	       and t2.parent_id=#{parentId}
+	      </if>
+	    </where>
+	</select>
+	
+	<insert id="save" parameterType="com.sky.admin.entity.Employee" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into t_employee (name,parent_id,org_id,level,created,created_by,last_upd,last_upd_by)
+		values
+		(#{name},#{parentId},#{orgId},#{level},now(),-1,now(),-1)
+		
+	</insert>
+	
+	<delete id="delete" parameterType="list">
+		delete from t_employee where id
+		<foreach collection="ids" open="in (" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

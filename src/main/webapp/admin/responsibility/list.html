@@ -1,0 +1,119 @@
+<div class="wrapper-md" ng-controller="resListController">
+  <div class="panel panel-default" style="width: 35%;float: left;">
+    <div class="panel-heading">
+    <ul class="nav nav-pills pull-right">
+            <li style=" padding-top:4px; padding-right:4px">
+	            <button  has-permission='res_add' class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="newRes()" ng-class="app.settings.navbarHeaderColor">
+	               <i class="fa fa-plus"></i>新增
+	            </button>
+            </li>
+    </ul>
+      职责列表
+    </div>
+    <div class="row wrapper">
+      <div class="col-sm-10">
+      职责名称: <input id="name" type="text" class="form-control input-sm w-sm inline m-r" ng-model="name" ng-keyup="search($event)"/>
+      <button class="btn btn-sm btn-default" ng-click="reSearch()" type="button">查询</button>
+      </div>
+    </div>
+    <div class="table-responsive">
+     <table class="table table-striped b-t b-light">
+        <thead>
+            <tr ng-class="app.settings.navbarHeaderColor">
+            <!-- 
+            <th style="width:20px;">
+              <label class="i-checks m-b-none">
+                <input type="checkbox" ng-click="selectAll()"><i></i>
+              </label>
+            </th>
+             -->
+            <th>职责ID</th>
+            <th>职责名称</th>
+            <th>职责描述</th>
+            <th style="width:100px;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in data" ng-class="{tr_selected:item.selected}" ng-click="selectOne(item,data)" ng-dblclick="newRes(item.id,0)">
+                <!-- <td><label class="i-checks m-b-none"><input type="checkbox" ng-model="data.selected"><i></i></label></td> -->
+                <td>{{item.id}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.descText}}</td>
+                <td>
+	              <a  has-permission='res_edit'  ng-click="newRes(item.id,1)" title="修改" class="active"><i class="fa fa-edit fa-lg"></i></a>
+	              &nbsp;&nbsp;
+	              <a  has-permission='res_del' ng-click="delRes(item.id)" title="删除" class="active"><i class="fa fa-trash-o fa-lg"></i></a>
+	            </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <footer class="panel-footer"><tm-pagination conf="paginationConf"></tm-pagination></footer>
+  </div>
+  <div class="panel panel-default" style="width: 30%;float: left;margin-left: 10px;">
+    <div class="panel-heading">
+    <ul class="nav nav-pills pull-right">
+            <li style=" padding-top:4px; padding-right:4px">
+	            <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="saveResMenu(selectItem.id)" ng-class="app.settings.navbarHeaderColor">
+	               <i class="fa fa-save"></i>保存
+	            </button>
+            </li>
+    </ul>
+      职责菜单
+    </div>
+    <div class="col" ng-if="isInitFinish">
+	    <div class="wrapper-md">
+	      <div class="b-a bg-light dk r r-2x" style="border: none;background-color:white">
+	        <span ng-if="doing_async">...loading...</span>
+	        <abn-tree 
+	          tree-data         = "my_data" 
+	          tree-control      = "my_tree" 
+	          on-select         = "my_tree_handler(branch)" 
+	          expand-level      = "2" 
+	          initial-selection = ""
+	          icon-leaf         = "fa fa-file-o"
+	          icon-expand       = "fa fa-plus"
+	          icon-collapse     = "fa fa-minus"
+	          checkbox          = "true"
+	          >
+	        </abn-tree>
+	      </div>
+	    </div>
+	  </div>
+  </div>
+  
+  <div class="panel panel-default" style="width: 30%;float: left;margin-left: 10px;">
+    <div class="panel-heading">
+    <ul class="nav nav-pills pull-right">
+            <li style=" padding-top:4px; padding-right:4px">
+	            <button class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="saveResButton()" ng-class="app.settings.navbarHeaderColor">
+	               <i class="fa fa-save"></i>保存
+	            </button>
+            </li>
+    </ul>
+     职责按钮
+    </div>
+    <div class="table-responsive">
+     <table class="table table-striped b-t b-light">
+        <thead ng-if="selectOneMenu">
+            <tr ng-class="app.settings.navbarHeaderColor">
+            <th style="width:20px;">
+              <label class="i-checks m-b-none">
+                <input type="checkbox" ng-click="selectAll(buttons)"><i></i>
+              </label>
+            </th>
+            <th>按钮名称</th>
+            <th>CODE</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in buttons" ng-class="{tr_selected:item.selected}" ng-click="selectButton(item,buttons)">
+                <td><label class="i-checks m-b-none"><input type="checkbox" ng-model="item.selected"><i></i></label></td>
+                <td>{{item.name}}</td>
+                <td>{{item.code}}</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+  </div>
+</div>

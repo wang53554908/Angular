@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sky.admin.dao.MenuMapper">
+	<resultMap id="menuMap" type="com.sky.admin.entity.Menu">
+		<id property="id" column="id" javaType="int"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="url" column="url" javaType="String"/>
+		<result property="parentId" column="parent_id" javaType="int"/>
+		<result property="sort" column="sort" javaType="int"/>
+		<result property="created" column="created" javaType="Date"/>
+		<result property="createdBy" column="created_by" javaType="String"/>
+		<result property="lastUpd" column="last_upd" javaType="Date"/>
+		<result property="lastUpdBy" column="last_upd_by" javaType="String"/>
+		<result property="parentName" column="parent_name" javaType="String"/>
+	</resultMap>
+	<select id="select" parameterType="com.sky.common.entity.Page" resultType="com.sky.admin.entity.Menu">
+		select t1.*
+		 from t_menu t1
+		<where>
+			<if test="params.name != null and params.name != ''">
+				and t1.name=#{params.name}
+			</if>
+		</where>
+	</select>
+	<select id="findOne" resultType="com.sky.admin.entity.Menu">
+		select * from t_menu where id = #{id}
+	</select>
+	<select id="update" parameterType="com.sky.admin.entity.Menu" >
+		update t_menu
+		<set>
+		  <if test="name != null and name != ''">
+		    name=#{name},
+		  </if>
+		  <if test="url != null and url != ''">
+		    url=#{url},
+		  </if>
+		  <if test="sort != null and sort != ''">
+		    sort=#{sort},
+		  </if>
+		</set>
+		where id=#{id}
+	</select>
+	
+	<select id="findRootMenuList"  parameterType="com.sky.admin.entity.Menu" resultType="com.sky.admin.entity.Menu">
+	    select * from t_menu  where parent_id is null order by sort
+	</select>
+	
+	<select id="findChildMenuList"  parameterType="com.sky.admin.entity.Menu" resultType="com.sky.admin.entity.Menu">
+	    select t2.*,t1.name as parent_name from t_menu t1,t_menu t2
+	    <where>
+	      t1.id = t2.parent_id
+	      <if test="parentId != null and parentId != ''">
+	       and t2.parent_id=#{parentId}
+	      </if>
+	    </where>
+	    order by sort
+	</select>
+	
+	<insert id="save" parameterType="com.sky.admin.entity.Menu" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into t_menu (name,parent_id,url,sort,level,created,created_by,last_upd,last_upd_by)
+		values
+		(#{name},#{parentId},#{url},#{sort},#{level},now(),-1,now(),-1)
+		
+	</insert>
+	
+	<delete id="delete" parameterType="list">
+		delete from t_menu where id
+		<foreach collection="ids" open="in (" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

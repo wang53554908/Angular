@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sky.admin.dao.UserMapper">
+	<resultMap id="userMap" type="com.sky.admin.entity.User">
+		<id property="id" column="id" javaType="int"/>
+		<result property="fstName" column="fst_name" javaType="String"/>
+		<result property="lstName" column="lst_name" javaType="String"/>
+		<result property="sex" column="sex" javaType="Date"/>
+		<result property="email" column="email" javaType="String"/>
+		<result property="login" column="login" javaType="String"/>
+		<result property="password" column="password" javaType="String"/>
+		<result property="activeFlg" column="active_flg" javaType="String"/>
+		<result property="searialNo" column="searial_no" javaType="String"/>
+		<result property="lastLogin" column="last_login" javaType="Date"/>
+		<result property="currentPosId" column="current_pos_id" javaType="int"/>
+		<result property="currentPosName" column="current_pos_name" javaType="String"/>
+		<result property="created" column="created" javaType="Date"/>
+		<result property="createdBy" column="created_by" javaType="String"/>
+		<result property="lastUpd" column="last_upd" javaType="Date"/>
+		<result property="lastUpdBy" column="last_upd_by" javaType="String"/>
+	</resultMap>
+	<select id="select" parameterType="com.sky.common.entity.Page" resultType="com.sky.admin.entity.User">
+		select t1.*,t2.name as currentPosName  from t_user t1 
+		left join t_position t2 on t1.current_Pos_Id = t2.id
+		<where>
+			<if test="params.login != null and params.login != ''">
+				and t1.login=#{params.login}
+			</if>
+		</where>
+	</select>
+	<select id="findOne" resultType="com.sky.admin.entity.User">
+		select * from t_user where id = #{id}
+	</select>
+	<select id="update" parameterType="com.sky.admin.entity.User" >
+		update t_user 
+		<set>
+		  <if test="fstName != null and fstName != ''">
+		    fst_name=#{fstName},
+		  </if>
+		  <if test="lstName != null and lstName != ''">
+		    lst_name=#{lstName},
+		  </if>
+		  <if test="sex != null and sex != ''">
+		    sex=#{sex},
+		  </if>
+		  <if test="email != null and email != ''">
+		    email=#{email},
+		  </if>
+		  <if test="login != null and login != ''">
+		    login=#{login},
+		  </if>
+		  <if test="password != null and password != ''">
+		    password=#{password},
+		  </if>
+		  <if test="activeFlg != null and activeFlg != ''">
+		    active_flg=#{activeFlg},
+		  </if>
+		  <if test="searialNo != null and searialNo != ''">
+		    searial_no=#{searialNo},
+		  </if>
+		  <if test="lastLogin != null and lastLogin != ''">
+		    last_login=#{lastLogin},
+		  </if>
+		  <if test="currentPosId != null and currentPosId != ''">
+		    current_pos_id=#{currentPosId},
+		  </if>
+		</set>
+		where id=#{id}
+	</select>
+	
+	<insert id="save" parameterType="com.sky.admin.entity.User" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into t_user (
+		fst_name,lst_name,sex,email,login,active_flg,searial_no,last_login,current_pos_id,
+		password,created,created_by,last_upd,last_upd_by)
+		values
+		(#{fstName},#{lstName},#{sex},#{email},#{login},#{activeFlg},#{searialNo},#{lastLogin},#{currentPosId},#{password},now(),-1,now(),-1)
+	</insert>
+	
+	<update id="clearCurrentPosition">
+	    update t_user set current_pos_id = null where id=#{id};
+	</update>
+	
+	<select id="find" parameterType="com.sky.admin.entity.User" resultType="com.sky.admin.entity.User">
+	    select * from t_user
+	    <where>
+	      <if test="login != null and login != ''">
+	        and login=#{login}
+	      </if>
+	      <if test="id != null">
+	        and id=#{id}
+	      </if>
+	    </where>
+	</select>
+</mapper>

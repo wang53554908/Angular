@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sky.admin.dao.OrgMapper">
+	<resultMap id="userMap" type="com.sky.admin.entity.Organization">
+		<id property="id" column="id" javaType="int"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="shortName" column="short_name" javaType="String"/>
+		<result property="created" column="created" javaType="Date"/>
+		<result property="createdBy" column="created_by" javaType="String"/>
+		<result property="lastUpd" column="last_upd" javaType="Date"/>
+		<result property="lastUpdBy" column="last_upd_by" javaType="String"/>
+	</resultMap>
+	<select id="select" parameterType="com.sky.common.entity.Page" resultType="com.sky.admin.entity.Organization">
+		select * from t_organization
+		<where>
+			<if test="params.name != null and params.name != ''">
+				and name=#{params.name}
+			</if>
+		</where>
+	</select>
+	<select id="findOne" resultType="com.sky.admin.entity.Organization">
+		select * from t_organization where id = #{id}
+	</select>
+	<select id="update" parameterType="com.sky.admin.entity.Organization" >
+		update t_organization 
+		<set>
+		  <if test="name != null and name != ''">
+		    name=#{name},
+		  </if>
+		  <if test="shortName != null and shortName != ''">
+		    short_name=#{shortName},
+		  </if>
+		</set>
+		where id=#{id}
+	</select>
+	
+	<insert id="save" parameterType="com.sky.admin.entity.Organization" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into t_organization (name,short_name,created,created_by,last_upd,last_upd_by)
+		values
+		(#{name},#{shortName},now(),-1,now(),-1)
+		
+	</insert>
+</mapper>

@@ -1,0 +1,126 @@
+/* app css stylesheet */
+
+.dropdown-menu > div > ul > li > a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+.dropdown-menu > div > ul > li > a:hover {
+    color: white;
+    background-color: #3278b3;
+}
+
+.dropdown-menu > li > label {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+}
+.dropdown-menu > li > label:hover {
+    color: white;
+    background-color: #3278b3;
+}
+
+.dropdown-menu > li > button {
+    margin: 5px;
+}
+
+.dropdown-menu.columns-2 {
+    min-width: 750px;
+}
+.dropdown-menu.columns-3 {
+    min-width: 750px;
+}
+.multi-column-dropdown {
+    margin: 10px 0px;
+    padding: 0px;
+    list-style: none;
+}
+.multi-column-dropdown > li > label {
+    display: block;
+    clear: both;
+    padding: 10px 20px;
+    margin: 1px 0px;
+    font-weight: normal;
+    line-height: 1.42657143;
+    white-space: normal;
+}
+
+.multi-column-dropdown > li.selected {
+    text-decoration: none;
+    margin: 1px 0px;
+    color: white;
+    background-color: #428bca;
+}
+
+.multi-column-dropdown > li > label:hover {
+    text-decoration: none;
+    color: white;
+    background-color: #3278b3;
+}
+
+.dropdown-menu.columns-2.column-sm {
+    min-width: 500px;
+}
+
+.multi-column-dropdown.dropdown-sm > li > label {
+    display: block;
+    clear: both;
+    padding: 7px 20px;
+    font-weight: normal;
+    line-height: 1.42657143;
+    color: #333;
+    white-space: nowrap;
+}
+
+.multi-column-dropdown.dropdown-sm > li > label:hover {
+    text-decoration: none;
+    color: white;
+    background-color: #3278b3;
+}
+
+.multi-column-dropdown.dropdown-sm > li > div {
+    display: block;
+    clear: both;
+    padding: 7px 20px;
+    font-weight: normal;
+    line-height: 1.42657143;
+    white-space: nowrap;
+}
+
+.multi-column-dropdown.dropdown-sm > li > div:hover {
+    text-decoration: none;
+    color: #333;
+    background-color: #eeeeee;
+}
+
+.hierarchy-dropdown {
+    list-style: none;
+    padding: 0px 10px 0px 26px;
+}
+
+.hierarchy-dropdown > li > label {
+    display: inline-block;
+    padding: 3px 10px;
+    margin: 1px 0px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42657143;
+    color: #333;
+    white-space: nowrap;
+    border-radius: 3px;
+}
+
+.hierarchy-dropdown > li > label:hover{
+    color: #ffffff;
+    background-color: #3278b3;
+}
+
+

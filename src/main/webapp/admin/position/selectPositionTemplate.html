@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h3 class="modal-title">选择职位</h3>
+</div>
+<div class="modal-body">
+    <div class="wrapper-md" >
+		<div class="panel panel-default">
+		    <div class="col" ng-if="isInitFinish">
+			    <div class="wrapper-md">
+			      <div class="b-a bg-light dk r r-2x" style="border: none;background-color:white">
+			        <span ng-if="doing_async">...loading...</span>
+			        <abn-tree 
+			          tree-data         = "my_data" 
+			          tree-control      = "my_tree" 
+			          on-select         = "my_tree_handler(branch)" 
+			          expand-level      = "2" 
+			          initial-selection = ""
+			          icon-leaf         = "fa fa-file-o"
+			          icon-expand       = "fa fa-plus"
+			          icon-collapse     = "fa fa-minus"
+			          related-select     = "true"
+			          checkbox          = "true"
+			          >
+			        </abn-tree>
+			      </div>
+			    </div>
+			  </div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">                  
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="ok()">提交</button>
+</div>

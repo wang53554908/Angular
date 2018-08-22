@@ -1,0 +1,68 @@
+<div ng-controller="userDetailController">
+    <div class="wrapper-md" >
+        <div class="panel panel-default">
+        <form class="form-horizontal ng-pristine ng-valid ng-valid-date ng-valid-required ng-valid-parse ng-valid-date-disabled" ng-submit="submit()">
+            <div class="panel-body">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">姓氏</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="user.fstName" ng-disabled="show" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">名称</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="user.lstName" ng-disabled="show" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">性别</label>
+                  <div class="col-sm-10">
+                    <select class="form-control" ng-model="user.sex" ng-disabled="show">
+                      <option value="">--请选择--</option>
+                      <option value="0">男</option>
+                      <option value="1">女</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">email</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" ng-model="user.email" ng-disabled="show">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">工号</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="user.searialNo" ng-disabled="show" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">登陆账号</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="user.login" ng-disabled="show" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">登陆密码</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" ng-model="user.password" ng-disabled="show" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">是否有效</label>
+                  <div class="col-sm-10">
+                    <label class="i-switch i-switch-md bg-info m-t-xs m-r">
+		              <input type="checkbox" checked ng-model="user.activeFlg">
+		              <i></i>
+		            </label>
+                  </div>
+                </div>
+            </div>
+            <footer class="panel-footer text-right bg-light lter" ng-if="!show">
+                  <input type="submit" ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" value="提交"/>
+             </footer>
+         </form>
+      </div>
+    </div>
+</div>

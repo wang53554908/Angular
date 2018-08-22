@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sky.admin.dao.UserPositionMapper">
+	<resultMap id="userPositionMap" type="com.sky.admin.entity.UserPosition">
+		<id property="id" column="id" javaType="int"/>
+		<result property="userId" column="user_id" javaType="int"/>
+		<result property="positionId" column="position_id" javaType="int"/>
+		<result property="positionName" column="position_name" javaType="String"/>
+	</resultMap>
+	<select id="getUserPositionList" parameterType="com.sky.admin.entity.UserPosition" resultMap="userPositionMap">
+		select t1.*,t2.name as positionName
+		 from t_user_position t1,t_position t2
+		<where>
+		    t1.position_id = t2.id
+			<if test="userId != null and userId != ''">
+				and t1.user_id=#{userId}
+			</if>
+			<if test="positionId != null and positionId != ''">
+			    and t1.position_id=#{positionId}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="deleteUserPositon">
+	    delete from t_user_position where user_id = #{userId}
+	    <if test="positionList != null">
+	       and position_id in
+	       <foreach collection="positionList" item="item" open="(" close=")" separator=",">
+	         #{item}
+	       </foreach>
+	    </if>
+	</delete>
+	
+	<insert id="saveUserPosition" parameterType="com.sky.admin.entity.UserPosition" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into t_user_position (user_id,position_id)
+		values
+		(#{userId},#{positionId})
+	</insert>
+	
+</mapper>

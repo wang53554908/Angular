@@ -1,0 +1,84 @@
+<div ng-controller="positionController">
+<div style="margin-left: 22px;">
+      <button has-permission='pos_topPosCreate' ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" ng-click="add_position(0)">一级职位创建</button>
+      <button has-permission='pos_secondPosCreate' ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" ng-click="add_position(1)">下级职位创建</button>
+</div>
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+  <div class="col">
+    <div class="wrapper-md">
+      <div class="b-a bg-light dk r r-2x">
+        <span ng-if="doing_async">...loading...</span>
+        <abn-tree 
+          tree-data         = "my_data" 
+          tree-control      = "my_tree" 
+          on-select         = "my_tree_handler(branch)" 
+          expand-level      = "2" 
+          initial-selection = ""
+          icon-leaf         = "fa fa-file-o"
+          icon-expand       = "fa fa-plus"
+          icon-collapse     = "fa fa-minus"
+          checkbox          = "false"
+          ng-if="isInitFinish">
+        </abn-tree>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="wrapper-md">
+      <div class="b-a bg-light dk r r-2x" ng-if="isShow">
+        <form class="form-horizontal ng-pristine ng-valid ng-valid-date ng-valid-required ng-valid-parse ng-valid-date-disabled" ng-submit="submit()">
+            <div class="panel-body">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">职位名称</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="position.name" ng-disabled="show" required>
+                  </div>
+                </div>
+                <input type="hidden" ng-hidden="true" ng-model="position.parentId"/>
+                <input type="hidden" ng-hidden="true" ng-model="position.level"/>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">所属部门</label>
+		          <div class="col-sm-10" dropdown>
+		                <input type="text"  ng-model="position.employeeName" ng-disabled="edit_mode" class="form-control" dropdown-toggle>
+		                <input type="text"  ng-model="position.employeeId" ng-hide="true">
+						<ul class="dropdown-menu" role="menu" style="width: 95%;left:15px;margin: 0px;">
+							<li>
+								<!-- mediaType, site, chunk tree -->
+								<div class="col-sm-10">
+									<script type="text/ng-template" id="treeitem.html">
+                                    <li ng-repeat="node in node.childEmps | limitTo: 200">
+                                        <label ng-click="selectItem(node.id,node.name)">
+                                            <span>{{ node.name }}</span>
+                                        </label>
+                                        <ul class="hierarchy-dropdown" ng-include="'treeitem.html'" ></ul>
+                                    </li>
+                                </script>
+									<ul class="multi-column-dropdown">
+										<ul class="hierarchy-dropdown">
+											<li ng-repeat="node in nodes"><label
+												ng-click="selectItem(node.id,node.name)"> <span>{{node.name }}</span>
+											</label>
+												<ul class="hierarchy-dropdown" ng-include="'treeitem.html'"
+													ng-if="!node.collapse"></ul></li>
+										</ul>
+									</ul>
+								</div>
+							</li>
+						</ul>
+				 </div>
+                </div>
+                <input type="hidden" ng-hidden="true" ng-model="position.parentId"/>
+                <input type="hidden" ng-hidden="true" ng-model="position.level"/>
+                <div class="form-group text-center">
+		          <div class="col-sm-10">
+		            <input has-permission='pos_add' type="submit" ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" value="保存"/>
+		            <input has-permission='pos_del' type="button" ng-class="app.settings.navbarHeaderColor" class="btn .btn-cancel" ng-click="del()" value="删除"/>
+		          </div>
+                </div>
+            </div>
+         </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=11; IE=10; IE=9; IE=8; IE=7; IE=EDGE">
+  <title>Be Angular | Bootstrap Admin Web App with AngularJS</title>
+  <meta name="description" content="app, web app, responsive, responsive layout, admin, admin panel, admin dashboard, flat, flat ui, ui kit, AngularJS, ui route, charts, widgets, components" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
+  <link rel="stylesheet" href="css/animate.css" type="text/css" />
+  <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="css/simple-line-icons.css" type="text/css" />
+  <link rel="stylesheet" href="css/font.css" type="text/css" />
+  <link rel="stylesheet" href="css/app.css" type="text/css" />
+  <link rel="stylesheet" href="css/ui-grid.css" type="text/css" />
+  <link rel="stylesheet" href="css/toaster.min.css" type="text/css" />
+  <link rel="stylesheet" href="css/tree.css" type="text/css" />
+   <!-- jQuery -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+</head>
+<body>
+<div class="app" id="loginForm" >
+	<div class="container w-xxl w-auto-xs" style="padding-top: 200px;">
+	  <a href class="navbar-brand block m-t">后台管理系统</a>
+	  <div class="m-b-lg">
+	  	<!-- 
+	    <div class="wrapper text-center">
+	      <strong>Sign in to get in touch</strong>
+	    </div>
+	     -->
+	    <form name="form" class="form-validation" id="form" action="login" method="post">
+	      <div class="list-group list-group-sm">
+	        <div class="list-group-item">
+	          <input type="text" placeholder="name" class="form-control no-border" name="login" required>
+	        </div>
+	        <div class="list-group-item">
+	           <input type="password" placeholder="password" class="form-control no-border" name="password" required>
+	        </div>
+	      </div>
+	      <button type="button" id="submit" class="btn btn-lg btn-primary btn-block" >登&nbsp;&nbsp;&nbsp;&nbsp;陆</button>
+	      <div class="line line-dashed"></div>
+	      <div class="text-danger wrapper text-center" id="msg">
+	        
+	      </div>
+	    </form>
+	  </div>
+	</div>
+</div>	
+<script type="text/javascript">
+  $(function(){
+	  $("#submit").click(function(){
+		  $.post("login",{login:$("input[name=login]").val(),password:$("input[name=password]").val()} ,function(data) {
+			  if(!data){
+				  //window.location.href="toLogin";
+				  $("#msg").html("登陆失败,账号或密码输入错误！");
+			  }else{
+				  window.location.href="index";
+			  }
+		  });
+	  })
+  });
+  $(document).keyup(function(event){
+	  if(event.keyCode ==13){
+	    $("#submit").trigger("click");
+	  }
+  });
+</script>
+</body>
+</html>

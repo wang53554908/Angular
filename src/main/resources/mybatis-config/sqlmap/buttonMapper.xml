@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sky.admin.dao.ButtonMapper">
+	<resultMap id="buttonMap" type="com.sky.admin.entity.Button">
+		<id property="id" column="id" javaType="int"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="menuId" column="menu_id" javaType="int"/>
+		<result property="code" column="code" javaType="String"/>
+	</resultMap>
+	<select id="select" parameterType="com.sky.common.entity.Page" resultType="com.sky.admin.entity.Button">
+		select * from t_button
+		<where>
+			<if test="params.name != null and params.name != ''">
+				and name=#{params.name}
+			</if>
+			<if test="params.menuId != null and params.menuId != ''">
+				and menu_id=#{params.menuId}
+			</if>
+		</where>
+	</select>
+	<select id="findOne" resultType="com.sky.admin.entity.Button">
+		select * from t_button where id = #{id}
+	</select>
+	<select id="update" parameterType="com.sky.admin.entity.Button" >
+		update t_button 
+		<set>
+		  <if test="name != null and name != ''">
+		    name=#{name},
+		  </if>
+		  <if test="code != null and code != ''">
+		    code=#{code},
+		  </if>
+		</set>
+		where id=#{id}
+	</select>
+	
+	<insert id="save" parameterType="com.sky.admin.entity.Button" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into t_button (name,code,menu_id)
+		values
+		(#{name},#{code},#{menuId})
+	</insert>
+	
+	<delete id="delete">
+	   delete from t_button where id = #{id}
+	</delete>
+	<select id="findByResId" resultType="com.sky.admin.entity.Button">
+	   select t.* from t_button t,t_res_button t1 where t.id = t1.button_id and t1.res_id=#{resId}
+	 </select>
+</mapper>

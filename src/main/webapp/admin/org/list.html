@@ -1,0 +1,49 @@
+<div class="wrapper-md" ng-controller="orgListController">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+    <ul class="nav nav-pills pull-right">
+            <li style=" padding-top:4px; padding-right:4px">
+	            <button has-permission='org_save' class="btn m-b-xs btn-sm btn-primary btn-addon" ui-sref="app.org.create()" ng-class="app.settings.navbarHeaderColor">
+	               <i class="fa fa-plus"></i>新增
+	            </button>
+            </li>
+    </ul>
+      组织列表
+    </div>
+    <div class="row wrapper">
+      <div class="col-sm-10">
+      组织名称: <input id="name" type="text" class="form-control input-sm w-sm inline m-r" ng-model="name" ng-keyup="search($event)"/>
+      <button class="btn btn-sm btn-default" ng-click="reSearch()" type="button">查询</button>
+      </div>
+    </div>
+    <div class="table-responsive">
+     <table class="table table-striped b-t b-light">
+        <thead>
+            <tr ng-class="app.settings.navbarHeaderColor">
+            <th style="width:20px;">
+              <label class="i-checks m-b-none">
+                <input type="checkbox" ng-click="selectAll()"><i></i>
+              </label>
+            </th>
+            <th>组织ID</th>
+            <th>组织名称</th>
+            <th>组织简称</th>
+            <th style="width:100px;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="data in data" ng-class="{tr_selected:data.selected}" ng-click="selectTr(data)" ng-dblclick="detail(data.id)">
+                <td><label class="i-checks m-b-none"><input type="checkbox" ng-model="data.selected"><i></i></label></td>
+                <td>{{data.id}}</td>
+                <td>{{data.name}}</td>
+                <td>{{data.shortName}}</td>
+                <td>
+	              <a has-permission='org_edit' ng-click="edit(data.id)" title="修改" class="active"><i class="fa fa-edit fa-lg"></i></a>
+	            </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <footer class="panel-footer"><tm-pagination conf="paginationConf"></tm-pagination></footer>
+  </div>
+</div>

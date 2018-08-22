@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sky.admin.dao.ResMenuMapper">
+	<resultMap id="resMenuMap" type="com.sky.admin.entity.ResMenu">
+		<id property="id" column="id" javaType="int"/>
+		<result property="resId" column="res_id" javaType="int"/>
+		<result property="menuId" column="menu_id" javaType="int"/>
+		<result property="created" column="created" javaType="Date"/>
+		<result property="createdBy" column="created_by" javaType="String"/>
+		<result property="lastUpd" column="last_upd" javaType="Date"/>
+		<result property="lastUpdBy" column="last_upd_by" javaType="String"/>
+	</resultMap>
+	<select id="select" parameterType="com.sky.common.entity.Page" resultType="com.sky.admin.entity.Responsibility">
+		select * from t_Responsibility
+		<where>
+			<if test="params.name != null and params.name != ''">
+				and name=#{params.name}
+			</if>
+		</where>
+	</select>
+	<select id="findByResId" resultType="com.sky.admin.entity.ResMenu">
+		select * from t_res_menu where res_id = #{resId}
+	</select>
+	<select id="update" parameterType="com.sky.admin.entity.Responsibility" >
+		update t_Responsibility 
+		<set>
+		  <if test="name != null and name != ''">
+		    name=#{name},
+		  </if>
+		  <if test="descText != null and descText != ''">
+		    desc_text=#{descText},
+		  </if>
+		</set>
+		where id=#{id}
+	</select>
+	
+	<insert id="save" parameterType="com.sky.admin.entity.ResMenu" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into t_res_menu (res_id,menu_id,created,created_by,last_upd,last_upd_by)
+		values
+		(#{resId},#{menuId},now(),-1,now(),-1)
+	</insert>
+	
+	<delete id="delete">
+	    delete from t_res_menu where res_id = #{resId}
+	</delete>
+</mapper>

@@ -1,0 +1,59 @@
+<div ng-controller="empTreeController">
+<div style="margin-left: 22px;">
+      <button has-permission='emp_topLevelCreate' ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" ng-click="add_emp(0)">一级部门创建</button>
+      <button has-permission='emp_secondLevelCreate' ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" ng-click="add_emp(1)">下级部门创建</button>
+</div>
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+  <div class="col">
+    <div class="wrapper-md">
+      <div class="b-a bg-light dk r r-2x">
+        <span ng-if="doing_async">...loading...</span>
+        <abn-tree 
+          tree-data         = "my_data" 
+          tree-control      = "my_tree" 
+          on-select         = "my_tree_handler(branch)" 
+          expand-level      = "2" 
+          initial-selection = ""
+          icon-leaf         = "fa fa-file-o"
+          icon-expand       = "fa fa-plus"
+          icon-collapse     = "fa fa-minus"
+          checkbox          = "false"
+          ng-if="isInitFinish">
+        </abn-tree>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="wrapper-md">
+      <div class="b-a bg-light dk r r-2x" ng-if="isShow">
+        <form class="form-horizontal ng-pristine ng-valid ng-valid-date ng-valid-required ng-valid-parse ng-valid-date-disabled" ng-submit="submit()">
+            <div class="panel-body">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">部门名称</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="emp.name" ng-disabled="show" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">所属组织</label>
+		          <div class="col-sm-10">
+		            <select name="emp.orgId" class="form-control" ng-disabled="edit_mode" ng-model="emp.orgId" ng-options="org.id as org.name for org  in orgEnums" required>
+		              <option value="">--请选择--</option>
+		            </select>
+		          </div>
+                </div>
+                <input type="hidden" ng-hidden="true" ng-model="emp.parentId"/>
+                <input type="hidden" ng-hidden="true" ng-model="emp.level"/>
+                <div class="form-group text-center">
+		          <div class="col-sm-10">
+		            <input has-permission='emp_save' type="submit" ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" value="保存"/>
+		            <input has-permission='emp_delete' type="button" ng-class="app.settings.navbarHeaderColor" class="btn .btn-cancel" ng-click="del()" value="删除"/>
+		          </div>
+                </div>
+            </div>
+         </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sky.admin.dao.UserResMapper">
+	<resultMap id="userResMap" type="com.sky.admin.entity.UserRes">
+		<id property="id" column="id" javaType="int"/>
+		<result property="userId" column="user_id" javaType="int"/>
+		<result property="resId" column="res_id" javaType="int"/>
+		<result property="resName" column="res_name" javaType="String"/>
+	</resultMap>
+	<select id="getUserResList" parameterType="com.sky.admin.entity.UserRes" resultMap="userResMap">
+		select t1.*,t2.name as resName
+		 from t_user_res t1,t_responsibility t2
+		<where>
+		    t1.res_id = t2.id
+			<if test="userId != null and userId != ''">
+				and t1.user_id=#{userId}
+			</if>
+			<if test="resId != null and resId != ''">
+			    and t1.res_id=#{resId}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="deleteUserRes">
+	    delete from t_user_res where user_id = #{userId}
+	    <if test="resList != null">
+	       and res_id in
+	       <foreach collection="resList" item="item" open="(" close=")" separator=",">
+	         #{item}
+	       </foreach>
+	    </if>
+	</delete>
+	
+	<insert id="saveUserRes" parameterType="com.sky.admin.entity.UserRes" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into t_user_res (user_id,res_id)
+		values
+		(#{userId},#{resId})
+	</insert>
+	
+</mapper>

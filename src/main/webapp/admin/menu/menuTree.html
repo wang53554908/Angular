@@ -1,0 +1,63 @@
+<div ng-controller="menuController">
+<div style="margin-left: 22px;">
+      <button has-permission='menu_topMenuCreate' ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" ng-click="add_menu(0)">一级菜单创建</button>
+      <button has-permission='menu_secondMenuCreate' ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" ng-click="add_menu(1)">下级菜单创建</button>
+      <button ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" ng-click="getSelectMenuId()">获取选中的菜单id</button>
+</div>
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+  <div class="col">
+    <div class="wrapper-md">
+      <div class="b-a bg-light dk r r-2x">
+        <span ng-if="doing_async">...loading...</span>
+        <abn-tree 
+          tree-data         = "my_data" 
+          tree-control      = "my_tree" 
+          on-select         = "my_tree_handler(branch)" 
+          expand-level      = "2" 
+          initial-selection = ""
+          icon-leaf         = "fa fa-file-o"
+          icon-expand       = "fa fa-plus"
+          icon-collapse     = "fa fa-minus"
+          checkbox          = "false">
+        </abn-tree>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="wrapper-md">
+      <div class="b-a bg-light dk r r-2x" ng-if="isShow">
+        <form class="form-horizontal ng-pristine ng-valid ng-valid-date ng-valid-required ng-valid-parse ng-valid-date-disabled" ng-submit="submit()">
+            <div class="panel-body">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">菜单名称</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="menu.name" ng-disabled="show" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">URL</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="menu.url" ng-disabled="show">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">排序</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="menu.sort" ng-disabled="show" required>
+                  </div>
+                </div>
+                <input type="hidden" ng-hidden="true" ng-model="menu.parentId"/>
+                <input type="hidden" ng-hidden="true" ng-model="menu.level"/>
+                <div class="form-group text-center">
+		          <div class="col-sm-10">
+		            <input has-permission='menu_add' type="submit" ng-class="app.settings.navbarHeaderColor" class="btn .btn-success" value="保存"/>
+		            <input has-permission='menu_del' type="button" ng-class="app.settings.navbarHeaderColor" class="btn .btn-cancel" ng-click="del()" value="删除"/>
+		          </div>
+                </div>
+            </div>
+         </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

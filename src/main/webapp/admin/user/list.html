@@ -1,0 +1,137 @@
+<div class="wrapper-md" ng-controller="userListController">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+    <ul class="nav nav-pills pull-right">
+            <li style=" padding-top:4px; padding-right:4px">
+	            <button has-permission='user_save' class="btn m-b-xs btn-sm btn-primary btn-addon" ui-sref="app.user.create()" ng-class="app.settings.navbarHeaderColor">
+	               <i class="fa fa-plus"></i>新增
+	            </button>
+            </li>
+    </ul>
+      用户列表
+    </div>
+    <div class="row wrapper">
+      <div class="col-sm-10">
+      登陆账号: <input id="name" type="text" class="form-control input-sm w-sm inline m-r" ng-model="name" ng-keyup="search($event)"/>
+      <button class="btn btn-sm btn-default" ng-click="reSearch()" type="button">查询</button>
+      </div>
+    </div>
+    <div class="table-responsive">
+     <table class="table table-striped b-t b-light">
+        <thead>
+            <tr ng-class="app.settings.navbarHeaderColor">
+            <th style="width:20px;" ng-if="false">
+              <label class="i-checks m-b-none">
+                <input type="checkbox" ng-click="selectAll(data)"><i></i>
+              </label>
+            </th>
+            <th>用户ID</th>
+            <th>姓</th>
+            <th>名</th>
+            <th>性别</th>
+            <th>登陆账号</th>
+            <th>是否有效</th>
+            <th>工号</th>
+            <th>上次登录时间</th>
+            <th>主要职位</th>
+            <th style="width:100px;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in data" ng-class="{tr_selected:item.selected}" ng-click="selectOne(item,data)" ng-dblclick="detail(item.id)">
+                <td ng-if="false"><label class="i-checks m-b-none"><input type="checkbox" ng-model="item.selected"><i></i></label></td>
+                <td>{{item.id}}</td>
+                <td>{{item.fstName}}</td>
+                <td>{{item.lstName}}</td>
+                <td>{{item.sex==0?'男':item.sex==1?'女':'未知'}}</td>
+                <td>{{item.login}}</td>
+                <td>{{item.activeFlg=='Y'?'有效':'无效'}}</td>
+                <td>{{item.searialNo}}</td>
+                <td>{{item.lastLogin | date:'yyyy-MM-dd hh:mm:ss'}}</td>
+                <td>{{item.currentPosName}}</td>
+                <td>
+	              <a has-permission='user_edit' ng-click="edit(item.id)" title="修改" style="text-decoration: underline;"><i class="fa fa-edit fa-lg"></i></a>
+	            </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <footer class="panel-footer"><tm-pagination conf="paginationConf"></tm-pagination></footer>
+  </div>
+	  <tabset class="tab-container">
+	    <tab heading="用户职位">
+	       <ul class="nav">
+            <li>
+	            <button  has-permission='user_selPosition' class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="selectUserPosition()" ng-class="app.settings.navbarHeaderColor">
+	               <i class="fa fa-plus"></i>选择职位
+	            </button>
+	            <button  has-permission='user_delPosition' class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="delUserPosition()" ng-class="app.settings.navbarHeaderColor">
+	               <i class="fa fa-minus"></i>删除职位
+	            </button>
+            </li>
+    	   </ul>
+    	   <div class="panel panel-default">
+    	   <div class="table-responsive">
+		     <table class="table table-striped b-t b-light">
+		        <thead>
+		            <tr ng-class="app.settings.navbarHeaderColor">
+		            <th style="width:20px;">
+		              <label class="i-checks m-b-none">
+		                <input type="checkbox" ng-click="selectAll(userPosition)"><i></i>
+		              </label>
+		            </th>
+		            <th>职位ID</th>
+		            <th>职位名称</th>
+		            <th style="width:200px;">操作</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+		            <tr ng-repeat="data in userPosition" ng-class="{tr_selected:data.selected}" ng-click="selectTr(data)" >
+		                <td><label class="i-checks m-b-none"><input type="checkbox" ng-model="data.selected"><i></i></label></td>
+		                <td>{{data.positionId}}</td>
+		                <td>{{data.positionName}}</td>
+		                <td><a ng-click="setDefaultPosition(data.positionId)" ng-if="selectItem.currentPosId!=data.positionId" style="text-decoration: underline;color: #7266ba" >设为默认职位</a></td>
+		            </tr>
+		        </tbody>
+		    </table>
+		   </div>
+		   </div>
+	    </tab>
+	    <tab heading="用户职责">
+	      <ul class="nav">
+            <li>
+	            <button  has-permission='user_selRes' class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="selectUserRes()" ng-class="app.settings.navbarHeaderColor">
+	               <i class="fa fa-plus"></i>选择职责
+	            </button>
+	            <button  has-permission='user_delRes' class="btn m-b-xs btn-sm btn-primary btn-addon" ng-click="delUserRes()" ng-class="app.settings.navbarHeaderColor">
+	               <i class="fa fa-minus"></i>删除职责
+	            </button>
+            </li>
+    	   </ul>
+    	   <div class="panel panel-default">
+    	   <div class="table-responsive">
+		     <table class="table table-striped b-t b-light">
+		        <thead>
+		            <tr ng-class="app.settings.navbarHeaderColor">
+		            <th style="width:20px;">
+		              <label class="i-checks m-b-none">
+		                <input type="checkbox" ng-click="selectAll(userRes)"><i></i>
+		              </label>
+		            </th>
+		            <th>职责ID</th>
+		            <th>职责名称</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+		            <tr ng-repeat="data in userRes" ng-class="{tr_selected:data.selected}" ng-click="selectTr(data)" >
+		                <td><label class="i-checks m-b-none"><input type="checkbox" ng-model="data.selected"><i></i></label></td>
+		                <td>{{data.resId}}</td>
+		                <td>{{data.resName}}</td>
+		            </tr>
+		        </tbody>
+		    </table>
+		   </div>
+		   </div>
+	    </tab>
+	  </tabset>
+</div>

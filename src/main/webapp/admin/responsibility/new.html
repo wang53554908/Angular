@@ -1,0 +1,29 @@
+<div class="modal-header">
+    <h3 class="modal-title">职责{{title}}</h3>
+</div>
+<div class="modal-body">
+    <div class="wrapper-md" >
+        <div class="panel panel-default">
+        <form class="form-horizontal ng-pristine ng-valid ng-valid-date ng-valid-required ng-valid-parse ng-valid-date-disabled" ng-submit="submit()">
+            <div class="panel-body">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">职责名称</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="res.name" ng-disabled="!showControlButton" value="res.name" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">职责描述</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="res.descText" ng-disabled="!showControlButton">
+                  </div>
+                </div>
+            </div>
+         </form>
+      </div>
+    </div>
+</div>
+<div class="modal-footer">                  
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="ok()" ng-if="showControlButton">提交</button>
+</div>

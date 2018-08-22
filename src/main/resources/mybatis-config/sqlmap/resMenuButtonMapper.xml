@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sky.admin.dao.ResMenuButtonMapper">
+	<resultMap id="buttonMap" type="com.sky.admin.entity.ResMenuButton">
+		<result property="resId" column="res_id" javaType="int"/>
+		<result property="menuId" column="menu_id" javaType="int"/>
+		<result property="buttonId" column="button_id" javaType="int"/>
+	</resultMap>
+	<select id="select" parameterType="com.sky.admin.entity.ResMenuButton" resultType="com.sky.admin.entity.ResMenuButton">
+		select * from t_res_button
+		<where>
+			<if test="resId != null and resId != ''">
+				and res_id=#{resId}
+			</if>
+			<if test="menuId != null and menuId != ''">
+				and menu_id=#{menuId}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="save" parameterType="com.sky.admin.entity.ResMenuButton" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into t_res_button (res_id,menu_id,button_id)
+		values
+		(#{resId},#{menuId},#{buttonId})
+	</insert>
+	
+	<delete id="delete">
+	   delete from t_res_button where res_id = #{resId} and menu_id = #{menuId}
+	</delete>
+</mapper>

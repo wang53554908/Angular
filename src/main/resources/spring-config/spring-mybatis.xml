@@ -1,0 +1,53 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+    <!-- 自动扫描的包 ,将带有注解的类 纳入spring容器管理 -->
+    <context:component-scan base-package="com.sky"></context:component-scan>
+
+    <!-- 引入jdbc配置文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:db-config/jdbc.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- dataSource 配置 -->
+    <bean id="sampleDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <!-- 基本属性 url、user、password -->
+        <property name="driverClassName" value="${driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+ 		<property name="maxWait" value="${jdbc.maxWait}" />
+
+    </bean>
+
+    <!-- mybatis文件配置，扫描所有mapper文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    	<property name="dataSource" ref="sampleDataSource"/>
+    	<property name="configLocation" value="classpath:mybatis-config/sqlmap-config.xml" />
+    	<property name="mapperLocations" value="classpath:mybatis-config/sqlmap/*.xml"/>
+    	
+    	<!-- MybatisSpringPageInterceptor分页拦截器 -->  
+        <property name="plugins">    
+            <bean class="com.sky.common.util.MybatisSpringPageInterceptor"></bean>  
+        </property> 
+    </bean>
+
+    <!-- spring与mybatis整合配置，扫描所有dao -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    	<property name="basePackage" value="com.sky.*.dao"/>
+    	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+</beans>

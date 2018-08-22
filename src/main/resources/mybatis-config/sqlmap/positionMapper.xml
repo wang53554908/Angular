@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.sky.admin.dao.PositionMapper">
+	<resultMap id="positionMap" type="com.sky.admin.entity.Position">
+		<id property="id" column="id" javaType="int"/>
+		<result property="name" column="name" javaType="String"/>
+		<result property="shortName" column="short_name" javaType="String"/>
+		<result property="created" column="created" javaType="Date"/>
+		<result property="createdBy" column="created_by" javaType="String"/>
+		<result property="lastUpd" column="last_upd" javaType="Date"/>
+		<result property="lastUpdBy" column="last_upd_by" javaType="String"/>
+		<result property="parentName" column="parent_name" javaType="String"/>
+		<result property="employeeName" column="employee_name" javaType="String"/>
+	</resultMap>
+	<select id="select" parameterType="com.sky.common.entity.Page" resultType="com.sky.admin.entity.Position">
+		select t1.*
+		 from t_position t1
+		<where>
+			<if test="params.name != null and params.name != ''">
+				and t1.name=#{params.name}
+			</if>
+		</where>
+	</select>
+	<select id="findOne" resultType="com.sky.admin.entity.Position">
+		select t1.*,t2.name as employee_name from t_position t1,t_employee t2 where t1.employee_id = t2.id and t1.id = #{id}
+	</select>
+	<select id="update" parameterType="com.sky.admin.entity.Position" >
+		update t_position 
+		<set>
+		  <if test="name != null and name != ''">
+		    name=#{name},
+		  </if>
+		  <if test="parentId != null and parentId != ''">
+		    parent_id=#{parentId},
+		  </if>
+		</set>
+		where id=#{id}
+	</select>
+	
+	<select id="findRootPositionList"  parameterType="com.sky.admin.entity.Position" resultMap="positionMap">
+	    select t1.*,t2.name as employee_name from t_position t1,t_employee t2 where t1.parent_id is null and t1.employee_id = t2.id
+	</select>
+	
+	<select id="findChildPositionList"  parameterType="com.sky.admin.entity.Position" resultMap="positionMap">
+	    select t2.*,t1.name as parent_name,t3.name as employee_name from t_position t1,t_position t2,t_employee t3
+	    <where>
+	      t1.id = t2.parent_id
+	      and t2.employee_id = t3.id
+	      <if test="parentId != null and parentId != ''">
+	       and t2.parent_id=#{parentId}
+	      </if>
+	    </where>
+	</select>
+	
+	<insert id="save" parameterType="com.sky.admin.entity.Position" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		insert into t_position (name,parent_id,employee_id,level,created,created_by,last_upd,last_upd_by)
+		values
+		(#{name},#{parentId},#{employeeId},#{level},now(),-1,now(),-1)
+		
+	</insert>
+	
+	<delete id="delete" parameterType="list">
+		delete from t_position where id
+		<foreach collection="ids" open="in (" close=")" separator="," item="id">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>
