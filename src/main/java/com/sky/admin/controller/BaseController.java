@@ -11,7 +11,7 @@ import com.sky.common.entity.Page;
 public class BaseController {
 	
 	public static final int MAX_NUM=10;
-	
+	//设置请求参数
 	public void setParams(Page<?> page){
 		Map<String, Object> param = new HashMap<String, Object>();  
 		Map<String, Object> requestParams = page.getParams();
